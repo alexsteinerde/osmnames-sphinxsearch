@@ -275,7 +275,6 @@ def prepareResultJson(result):
     prev_index = result['start_index'] - result['count']
     if prev_index >= 0:
         response['previousIndex'] = prev_index
-
     response['results'] = prepareNameSuffix(response['results'])
 
     return response
@@ -307,7 +306,7 @@ def parseDisplayName(row):
 
 def prepareNameSuffix(results):
     """Parse and prepare name_suffix based on results."""
-    counts = {'country_code': [], 'city': [], 'name': [], 'county': []}
+    counts = {'country_code': [], 'city': [], 'name': []}
 
     # Separate different country codes
     for row in results:
@@ -325,19 +324,7 @@ def prepareNameSuffix(results):
     newresults = []
     for row in results:
         try:
-            if not row['city']:
-                row = parseDisplayName(row)
-
-            name_suffix = []
-            if (row['type'] != 'city' and len(row['city']) > 0 and row['name'] != row['city'] and
-               (len(counts['city']) > 1 or len(counts['name']) > 1)):
-                name_suffix.append(row['city'])
-            if row['country_code'] == 'us' and len(counts['state']) > 1 and len(row['state']) > 0:
-                name_suffix.append(row['state'])
-            if len(counts['county']) > 1:
-                name_suffix.append(row['county'])
-            if len(counts['country_code']) > 1:
-                name_suffix.append(row['country_code'].upper())
+            name_suffix = [row['name_en'], row['country_en']]
             row['name_suffix'] = ', '.join(name_suffix)
         except:
             pass
@@ -547,7 +534,6 @@ def reverse_search_url(lon, lat, classes):
     """REST API for reverse_search."""
     code = 400
     data = {'format': 'json'}
-
     debug = request.args.get('debug')
     times = {}
 
