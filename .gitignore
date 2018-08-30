@@ -1,5 +1,8 @@
 .old
 .data
+data/
+log/
+tmp/
 .DS_Store
 *.pyc
 
